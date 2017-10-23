@@ -2,12 +2,7 @@
 int main(int argc, char **argv)
 {
 	int fd;
-	char *filename = "BD1.txt";
-
-	if(argc>1 && !is_null(argv[1]))
-		filename = argv[1];
-	fd = dev_open("dev/ttyUSB1");
-	//is_open(fd, filename);
+	fd = dev_open("/dev/ttyUSB0");
 
 	char str[READ_NUM], str_GZV[100];
 
