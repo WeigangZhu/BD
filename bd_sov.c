@@ -13,7 +13,7 @@ int dev_open(char dev[])
     struct timeval timeout;
     speed_t baud_rate_i, baud_rate_o;
 
-    fd = open(dev, O_RDWR | O_NONBLOCK);
+    fd = open(dev, O_RDWR | O_NONBLOCK );
     if (fd == -1)
 		printf("can not open the %s !\n",dev);
     else
