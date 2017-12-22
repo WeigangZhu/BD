@@ -1,3 +1,5 @@
 *.o
 *~
-main
+maini
+*build
+
