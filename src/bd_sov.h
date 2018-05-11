@@ -65,7 +65,7 @@ struct BD_UTC_TIME
 	float second;
 };
 
-void test_re(int para);
+
 void is_open(int fd, char *filename);  // open file
 int is_null(char *str);  //string is null?
 int flag_mode(char ); // return which data section, GPGGA,GPZDA or GPVTG
@@ -74,8 +74,8 @@ double Trans(int ); // return 10^i
 double Trans_verse(int );//return 10^(-i)
 
 float char2num(char *); // char to float
-int char2str(char *str_in,char *str_re,int pos) ; // char to string 
-int GZV_sep(char *str, char *str_re,int pos);
+int char2str(char *str_in, char *str_re, int pos) ; // char to string 
+int GZV_sep(char *str, char *str_re, int pos);
 
 void GPGGA_sov(char *str, struct BD_GPGGA *fg);
 #endif

@@ -14,10 +14,8 @@ int dev_open(char dev[])
     speed_t baud_rate_i, baud_rate_o;
 
     fd = open(dev, O_RDWR | O_NONBLOCK );
-    if (fd == -1)
-		printf("can not open the %s !\n",dev);
-    else
-		printf("open %s ok!\n",dev);
+    
+    is_open(fd, dev); 
     
     flag = tcgetattr(fd, &term);
     baud_rate_i = cfgetispeed(&term);
@@ -77,64 +75,66 @@ int set_Parity(int fd, int databits, int stopbits, int parity)
 {
     struct termios options;
     if (tcgetattr(fd, &options) != 0) {
-	perror("SetupSerial 1");
-	return (FALSE);
+		perror("SetupSerial 1");
+		return (FALSE);
     }
     options.c_cflag &= ~CSIZE;
     switch (databits) {		/*设置数据位数 */
-    case 7:
-	options.c_cflag |= CS7;
-	break;
-    case 8:
-	options.c_cflag |= CS8;
-	break;
-    default:
-	fprintf(stderr, "Unsupported data size\n");
-	return (FALSE);
+    	case 7:
+				options.c_cflag |= CS7;
+				break;
+    	case 8:
+				options.c_cflag |= CS8;
+				break;
+    	default:
+				fprintf(stderr, "Unsupported data size\n");
+				return (FALSE);
     }
+    
     switch (parity) {
-    case 'n':
-    case 'N':
-//        options.c_cflag &= ~PARENB;   /* Clear parity enable */
-//        options.c_iflag &= ~INPCK;     /* Enable parity checking */
-	options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);	/*Input */
-	options.c_oflag &= ~OPOST;	/*Output */
-	break;
-    case 'o':
-    case 'O':
-	options.c_cflag |= (PARODD | PARENB);	/* 设置为奇效验 */
-	options.c_iflag |= INPCK;	/* Disnable parity checking */
-	break;
-    case 'e':
-    case 'E':
-	options.c_cflag |= PARENB;	/* Enable parity */
-	options.c_cflag &= ~PARODD;	/* 转换为偶效验 */
-	options.c_iflag |= INPCK;	/* Disnable parity checking */
-	break;
-    case 'S':
-    case 's':			/*as no parity */
-	options.c_cflag &= ~PARENB;
-	options.c_cflag &= ~CSTOPB;
-	break;
-    default:
-	fprintf(stderr, "Unsupported parity\n");
-	return (FALSE);
+    	case 'n':
+    	case 'N':
+				// options.c_cflag &= ~PARENB;   /* Clear parity enable */
+				// options.c_iflag &= ~INPCK;     /* Enable parity checking */
+				options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);	/*Input */
+				options.c_oflag &= ~OPOST;	/*Output */
+				break;
+    	case 'o':
+    	case 'O':
+				options.c_cflag |= (PARODD | PARENB);	/* 设置为奇效验 */
+				options.c_iflag |= INPCK;	/* Disnable parity checking */
+				break;
+    	case 'e':
+    	case 'E':
+			options.c_cflag |= PARENB;	/* Enable parity */
+			options.c_cflag &= ~PARODD;	/* 转换为偶效验 */
+			options.c_iflag |= INPCK;	/* Disnable parity checking */
+			break;
+	    case 'S':
+	    case 's':			/*as no parity */
+			options.c_cflag &= ~PARENB;
+			options.c_cflag &= ~CSTOPB;
+			break;
+	    default:
+			fprintf(stderr, "Unsupported parity\n");
+			return (FALSE);
     }
+    
 /* 设置停止位*/
     switch (stopbits) {
-    case 1:
-	options.c_cflag &= ~CSTOPB;
-	break;
-    case 2:
-	options.c_cflag |= CSTOPB;
-	break;
-    default:
-	fprintf(stderr, "Unsupported stop bits\n");
-	return (FALSE);
+	    case 1:
+			options.c_cflag &= ~CSTOPB;
+			break;
+	    case 2:
+			options.c_cflag |= CSTOPB;
+			break;
+	    default:
+			fprintf(stderr, "Unsupported stop bits\n");
+			return (FALSE);
     }
 /* Set input parity option */
     if ((parity != 'n') && (parity != 'N'))
-	options.c_iflag |= INPCK;
+		options.c_iflag |= INPCK;
 
     options.c_cc[VTIME] = 5;	// 0.5 seconds
     options.c_cc[VMIN] = 1;
@@ -152,18 +152,13 @@ int set_Parity(int fd, int databits, int stopbits, int parity)
 
     tcflush(fd, TCIFLUSH);	/* Update the options and do it NOW */
     if (tcsetattr(fd, TCSANOW, &options) != 0) {
-	perror("SetupSerial 3");
-	return (FALSE);
+		perror("SetupSerial 3");
+		return (FALSE);
     }
 
     return (TRUE);
 }
 
-
-//
-void test_re(int para)
-{
-}
 
 
 // open file
@@ -256,7 +251,7 @@ float char2num(char *vec)
 
 
 // char to string 
-int char2str(char *str_in,char *str_re,int pos) 
+int char2str(char *str_in, char *str_re, int pos) 
 {
 	int k,j;
 	//char *str_re;
@@ -272,12 +267,12 @@ int char2str(char *str_in,char *str_re,int pos)
 // return section in '$'
 int GZV_sep(char *str_in, char *str_re,int pos)
 {
-	int i=pos,j=1;
+	int i = pos, j = 1;
 	str_re[0]= '$';
 	int len = strlen(str_in);
 	//printf("%s\n\n",str);
 	for(;str_in[i]!= '$' && i < len; ++i);
-	++i;
+		++i;
 	//printf("%d\n\n",i);
 
 	while(str_in[i]!= '$' && i<len)
@@ -286,7 +281,7 @@ int GZV_sep(char *str_in, char *str_re,int pos)
 		++i;
 		++j;
 	}
-	str_re[j]='\0';
+	str_re[j] = '\0';
 	//printf("%d\n\n\n",i);
 
 	return i-1;

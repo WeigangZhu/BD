@@ -22,7 +22,7 @@ int main(int argc, char **argv)
 				printf("%c", str[i]);
 		}
 
-		/*
+		
 		for (i = 0; i < len; ++i) 
 		{
 			i = GZV_sep(str,str_GZV,i);
@@ -66,7 +66,7 @@ int main(int argc, char **argv)
 				printf("GPGGA.velocity_kilomile = %.10lf km/h\n\n\n",velocity);
 			}
 
-		}*/
+		}
 	}
 
 	close(fd);
